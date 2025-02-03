@@ -1,22 +1,63 @@
 import React, { useState, useEffect } from 'react';
 
-const MeltdownTracker = () => {
-  // Initialize state with data from localStorage or defaults
-  const [person1Count, setPerson1Count] = useState(() => {
-    const saved = localStorage.getItem('person1Meltdowns');
-    return saved ? parseInt(saved, 10) : 0;
-  });
-  
-  const [person2Count, setPerson2Count] = useState(() => {
-    const saved = localStorage.getItem('person2Meltdowns');
-    return saved ? parseInt(saved, 10) : 0;
-  });
+const BIN_ID = "67a14774ad19ca34f8f956c7"; // Replace with your actual JSONBin ID
+const API_KEY = "$2a$10$KXcOxj3.fZxuE7t0JEYtVeJOhdl6OQGF0/wcixatIPPXV9fHql0jK" // Replace with your JSONBin API Key
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-  // Save to localStorage whenever counts change
+// Fetch data from JSONBin.io
+const fetchData = async () => {
+  try {
+    const response = await fetch(`${API_URL}/latest`, {
+      headers: { "X-Master-Key": API_KEY },
+    });
+    const data = await response.json();
+    return data.record;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return { person1Meltdowns: 0, person2Meltdowns: 0 };
+  }
+};
+
+// Update JSONBin.io
+const updateData = async (person1Count, person2Count) => {
+  try {
+    await fetch(API_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+      body: JSON.stringify({ person1Meltdowns: person1Count, person2Meltdowns: person2Count }),
+    });
+  } catch (error) {
+    console.error("Error updating data:", error);
+  }
+};
+
+const MeltdownTracker = () => {
+  const [person1Count, setPerson1Count] = useState(0);
+  const [person2Count, setPerson2Count] = useState(0);
+
+  // Load scores from JSONBin.io on mount
   useEffect(() => {
-    localStorage.setItem('person1Meltdowns', person1Count.toString());
-    localStorage.setItem('person2Meltdowns', person2Count.toString());
-  }, [person1Count, person2Count]);
+    const loadScores = async () => {
+      const data = await fetchData();
+      setPerson1Count(data.person1Meltdowns);
+      setPerson2Count(data.person2Meltdowns);
+    };
+    loadScores();
+  }, []);
+
+  // Function to update scores and sync with JSONBin.io
+  const handleUpdate = (person, value) => {
+    const newPerson1Count = person === 1 ? value : person1Count;
+    const newPerson2Count = person === 2 ? value : person2Count;
+
+    setPerson1Count(newPerson1Count);
+    setPerson2Count(newPerson2Count);
+
+    updateData(newPerson1Count, newPerson2Count);
+  };
 
   // Function to get appropriate emoji based on count
   const getEmoji = (count) => {
@@ -47,7 +88,7 @@ const MeltdownTracker = () => {
           </div>
           <div className="flex items-center space-x-4">
             <button 
-              onClick={() => setPerson1Count(Math.max(0, person1Count - 1))}
+              onClick={() => handleUpdate(1, Math.max(0, person1Count - 1))}
               className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
             >
               -
@@ -56,7 +97,7 @@ const MeltdownTracker = () => {
               <input
                 type="range"
                 value={person1Count}
-                onChange={(e) => setPerson1Count(Number(e.target.value))}
+                onChange={(e) => handleUpdate(1, Number(e.target.value))}
                 min="0"
                 max="100"
                 step="1"
@@ -64,7 +105,7 @@ const MeltdownTracker = () => {
               />
             </div>
             <button 
-              onClick={() => setPerson1Count(Math.min(100, person1Count + 1))}
+              onClick={() => handleUpdate(1, Math.min(100, person1Count + 1))}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
               +
@@ -81,7 +122,7 @@ const MeltdownTracker = () => {
           </div>
           <div className="flex items-center space-x-4">
             <button 
-              onClick={() => setPerson2Count(Math.max(0, person2Count - 1))}
+              onClick={() => handleUpdate(2, Math.max(0, person2Count - 1))}
               className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
             >
               -
@@ -90,7 +131,7 @@ const MeltdownTracker = () => {
               <input
                 type="range"
                 value={person2Count}
-                onChange={(e) => setPerson2Count(Number(e.target.value))}
+                onChange={(e) => handleUpdate(2, Number(e.target.value))}
                 min="0"
                 max="100"
                 step="1"
@@ -98,7 +139,7 @@ const MeltdownTracker = () => {
               />
             </div>
             <button 
-              onClick={() => setPerson2Count(Math.min(100, person2Count + 1))}
+              onClick={() => handleUpdate(2, Math.min(100, person2Count + 1))}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
               +
