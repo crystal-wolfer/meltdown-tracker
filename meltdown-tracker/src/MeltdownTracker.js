@@ -42,7 +42,7 @@ const MeltdownTracker = () => {
         {/* Person 1 */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Person 1</h2>
+            <h2 className="text-xl font-semibold">Jess</h2>
             <div className="text-4xl">{getEmoji(person1Count)}</div>
           </div>
           <div className="flex items-center space-x-4">
@@ -76,7 +76,7 @@ const MeltdownTracker = () => {
         {/* Person 2 */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Person 2</h2>
+            <h2 className="text-xl font-semibold">Tsani</h2>
             <div className="text-4xl">{getEmoji(person2Count)}</div>
           </div>
           <div className="flex items-center space-x-4">
@@ -114,9 +114,9 @@ const MeltdownTracker = () => {
               {person1Count === person2Count ? (
                 "It's a tie! You're both equally melting down! 🤝"
               ) : person1Count > person2Count ? (
-                "Person 1 is winning the meltdown race! 🏆"
+                "Jess is winning the meltdown race! 🏆"
               ) : (
-                "Person 2 is winning the meltdown race! 🏆"
+                "Tsani is winning the meltdown race! 🏆"
               )}
             </p>
           </div>
