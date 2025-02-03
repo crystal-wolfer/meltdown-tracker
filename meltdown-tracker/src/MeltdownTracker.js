@@ -18,7 +18,7 @@ const fetchData = async () => {
   }
 };
 
-// Update JSONBin.io
+// Update JSONBin.io when user clicks "Save"
 const updateData = async (person1Count, person2Count) => {
   try {
     await fetch(API_URL, {
@@ -37,8 +37,9 @@ const updateData = async (person1Count, person2Count) => {
 const MeltdownTracker = () => {
   const [person1Count, setPerson1Count] = useState(0);
   const [person2Count, setPerson2Count] = useState(0);
+  const [isSaved, setIsSaved] = useState(true); // Track if changes need saving
 
-  // Load scores from JSONBin.io on mount
+  // Load scores from JSONBin.io when the app starts
   useEffect(() => {
     const loadScores = async () => {
       const data = await fetchData();
@@ -48,15 +49,17 @@ const MeltdownTracker = () => {
     loadScores();
   }, []);
 
-  // Function to update scores and sync with JSONBin.io
+  // Function to update local values (without API call)
   const handleUpdate = (person, value) => {
-    const newPerson1Count = person === 1 ? value : person1Count;
-    const newPerson2Count = person === 2 ? value : person2Count;
+    if (person === 1) setPerson1Count(value);
+    else setPerson2Count(value);
+    setIsSaved(false); // Mark as unsaved
+  };
 
-    setPerson1Count(newPerson1Count);
-    setPerson2Count(newPerson2Count);
-
-    updateData(newPerson1Count, newPerson2Count);
+  // Function to manually save data to JSONBin.io
+  const handleSave = async () => {
+    await updateData(person1Count, person2Count);
+    setIsSaved(true); // Mark as saved
   };
 
   // Function to get appropriate emoji based on count
@@ -162,6 +165,19 @@ const MeltdownTracker = () => {
             </p>
           </div>
         )}
+
+        {/* Save Button */}
+        <div className="text-center mt-6">
+          <button 
+            onClick={handleSave} 
+            className={`px-6 py-2 text-white rounded transition-colors ${
+              isSaved ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+            }`}
+            disabled={isSaved}
+          >
+            {isSaved ? "Saved ✅" : "Save"}
+          </button>
+        </div>
       </div>
     </div>
   );
