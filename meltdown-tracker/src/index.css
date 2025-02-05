@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom slider styles */
+@layer components {
+  .custom-slider {
+    @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    pointer-events: auto;
+  }
+
+  .custom-slider::-webkit-slider-thumb {
+    @apply w-6 h-6 bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600;
+    -webkit-appearance: none;
+    margin-top: -8px; /* Centers the thumb vertically */
+  }
+
+  .custom-slider::-moz-range-thumb {
+    @apply w-6 h-6 bg-blue-500 border-0 rounded-full cursor-pointer hover:bg-blue-600;
+  }
+
+  .custom-slider::-webkit-slider-runnable-track {
+    @apply w-full h-2 bg-gray-200 rounded-lg cursor-pointer;
+  }
+
+  .custom-slider::-moz-range-track {
+    @apply w-full h-2 bg-gray-200 rounded-lg cursor-pointer;
+  }
+
+  /* Focus states for better accessibility */
+  .custom-slider:focus {
+    outline: none;
+  }
+
+  .custom-slider:focus::-webkit-slider-thumb {
+    @apply ring-2 ring-blue-300;
+  }
+
+  .custom-slider:focus::-moz-range-thumb {
+    @apply ring-2 ring-blue-300;
+  }
+}
