@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/meltdown-tracker/static/css/main.cf890fdb.css",
-    "main.js": "/meltdown-tracker/static/js/main.55cafe17.js",
+    "main.css": "/meltdown-tracker/static/css/main.a5d85729.css",
+    "main.js": "/meltdown-tracker/static/js/main.ff08aa20.js",
     "index.html": "/meltdown-tracker/index.html",
-    "main.cf890fdb.css.map": "/meltdown-tracker/static/css/main.cf890fdb.css.map",
-    "main.55cafe17.js.map": "/meltdown-tracker/static/js/main.55cafe17.js.map"
+    "main.a5d85729.css.map": "/meltdown-tracker/static/css/main.a5d85729.css.map",
+    "main.ff08aa20.js.map": "/meltdown-tracker/static/js/main.ff08aa20.js.map"
   },
   "entrypoints": [
-    "static/css/main.cf890fdb.css",
-    "static/js/main.55cafe17.js"
+    "static/css/main.a5d85729.css",
+    "static/js/main.ff08aa20.js"
   ]
 }
